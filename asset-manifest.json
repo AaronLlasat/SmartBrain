@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/AaronLlasat/SmartBrainLogin/static/css/main.7d375eea.css",
+    "main.js": "/AaronLlasat/SmartBrainLogin/static/js/main.b9351fd4.js",
+    "static/js/937.3fa3b278.chunk.js": "/AaronLlasat/SmartBrainLogin/static/js/937.3fa3b278.chunk.js",
+    "static/js/787.97a96b3a.chunk.js": "/AaronLlasat/SmartBrainLogin/static/js/787.97a96b3a.chunk.js",
+    "index.html": "/AaronLlasat/SmartBrainLogin/index.html",
+    "main.7d375eea.css.map": "/AaronLlasat/SmartBrainLogin/static/css/main.7d375eea.css.map",
+    "main.b9351fd4.js.map": "/AaronLlasat/SmartBrainLogin/static/js/main.b9351fd4.js.map",
+    "937.3fa3b278.chunk.js.map": "/AaronLlasat/SmartBrainLogin/static/js/937.3fa3b278.chunk.js.map",
+    "787.97a96b3a.chunk.js.map": "/AaronLlasat/SmartBrainLogin/static/js/787.97a96b3a.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.7d375eea.css",
+    "static/js/main.b9351fd4.js"
+  ]
+}
