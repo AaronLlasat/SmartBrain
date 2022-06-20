@@ -9,7 +9,7 @@ import ImageLinkForm from './components/imagelinkform/ImageLinkForm';
 import Rank from './components/rank/Rank';
 import LoadBg from './LoadBg';
 import Clarifai from 'clarifai';
-import {hiddenKey} from './ClarifaiKey'
+import {getKey} from './ClarifaiKey'
 
 window.process = {
   env: {
@@ -18,7 +18,7 @@ window.process = {
 }
 
 const app = new Clarifai.App({
-  apiKey: hiddenKey,
+  apiKey: getKey(),
  });
 
 class App extends Component  {
