@@ -8,8 +8,6 @@ import Logo from './components/logo/Logo';
 import ImageLinkForm from './components/imagelinkform/ImageLinkForm';
 import Rank from './components/rank/Rank';
 import LoadBg from './LoadBg';
-import Clarifai from 'clarifai';
-import {getKey} from './ClarifaiKey'
 
 window.process = {
   env: {
@@ -17,26 +15,42 @@ window.process = {
   }
 }
 
-const app = new Clarifai.App({
-  apiKey: getKey(),
- });
+const initialState = {
+  input:'',
+  imageUrl:'',
+  box:[],
+  route: 'signin',
+  isSignedIn: false,
+  user: {
+     id: "",
+     name:"",
+     email: "",
+     entries: 0,
+     joined: ""
+  }
+}
 
 class App extends Component  {
   constructor() {
   super();
-   this.state ={
-     input:'',
-     imageUrl:'',
-     box:[],
-     route: 'signin',
-     isSignedIn: false
-  }
+  this.state = initialState;
  }
 
+
+ loadUser = (data) => {
+    this.setState({user:{
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      entries: data.entries,
+      joined: data.joined
+
+    }})
+ }
   onRouteChange = (route) => {
     
     if (route ==='signout') {
-      this.setState({isSignedIn:false})
+      this.setState(initialState);
     } else if (route === 'home') {
       this.setState({isSignedIn:true})
     }
@@ -53,7 +67,7 @@ class App extends Component  {
     const clarifaiFace = data.outputs[0].data;
     const facesArray = [];
 
-    clarifaiFace.regions.map(face => {
+    clarifaiFace.regions.forEach(face => {
       const clarifaiInfo = face.region_info.bounding_box;
 
       const iterationFace = {
@@ -79,8 +93,30 @@ class App extends Component  {
 
   onButtonSubmit = () => {
       this.setState({imageUrl: this.state.input})
-      app.models.predict(Clarifai.FACE_DETECT_MODEL, this.state.input)
-      .then(response => this.displayFaceBox(this.calculateFaceLocation(response)))
+      fetch("https://salty-river-25477.herokuapp.com/imageurl", {
+            method: 'post',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                input: this.state.input
+            })
+      })
+      .then(response => response.json())
+      .then(response => {
+        if (response) {
+          fetch("https://salty-river-25477.herokuapp.com/image", {
+            method: 'put',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                id: this.state.user.id
+          })
+        })
+        .then(response => response.json())
+            .then(count => {
+              this.setState(Object.assign(this.state.user, {entries:count}))
+            })
+            .catch(console.log)
+        }
+        this.displayFaceBox(this.calculateFaceLocation(response))})
       .catch(err => console.log(err))
   }
 
@@ -96,16 +132,16 @@ class App extends Component  {
           ? 
           <>
             <Logo/>
-            <Rank/> 
+            <Rank username={this.state.user.name} entries={this.state.user.entries}/> 
             <ImageLinkForm onInputChange={this.onInputChange} onButtonSubmit={this.onButtonSubmit}/>
             <FaceRecognition box={box} imageUrl={imageUrl}/>
           </>
           : (
             route === 'signin' 
-            ?<SignIn onRouteChange={this.onRouteChange}/>
+            ?<SignIn loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
             : route === 'signout'
-            ? <SignIn onRouteChange={this.onRouteChange}/>
-            : <Register onRouteChange={this.onRouteChange}/>
+            ? <SignIn loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
+            : <Register loadUser={this.loadUser} onRouteChange={this.onRouteChange}/>
           )
           
           
