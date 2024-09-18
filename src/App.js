@@ -93,7 +93,7 @@ class App extends Component  {
 
   onButtonSubmit = () => {
       this.setState({imageUrl: this.state.input})
-      fetch("https://salty-river-25477.herokuapp.com/imageurl", {
+      fetch("https://smart-brain-api-a3yx.onrender.com/imageurl", {
             method: 'post',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -103,7 +103,7 @@ class App extends Component  {
       .then(response => response.json())
       .then(response => {
         if (response) {
-          fetch("https://salty-river-25477.herokuapp.com/image", {
+          fetch("https://smart-brain-api-a3yx.onrender.com/image", {
             method: 'put',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
